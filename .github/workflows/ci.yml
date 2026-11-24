@@ -17,6 +17,14 @@ jobs:
       # Checkout the code
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # <-- ADD THIS (Gitleaks needs full history)
+
+    # --- NEW: GITLEAKS SCAN ---
+      - name: Run Gitleaks scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Install Java
       - name: Set up JDK 17
