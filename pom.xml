@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.11</version>
+        <version>3.5.14</version>
         <relativePath/>
     </parent>
     <groupId>com.qrapp</groupId>
@@ -15,12 +15,12 @@
     <description>QR Code Generator App</description>
     <properties>
         <java.version>17</java.version>
-        <!-- 1. FORCE PATCHED VERSIONS HERE -->
+        <!-- Force patched versions for Trivy findings -->
         <tomcat.version>10.1.59</tomcat.version>
         <jackson-bom.version>2.18.11</jackson-bom.version>
         <micrometer.version>1.15.12</micrometer.version>
     </properties>
-    <!-- 2. ADD THIS DEPENDENCY MANAGEMENT BLOCK -->
+    
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -40,7 +40,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <!-- END OF NEW BLOCK -->
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -54,17 +54,7 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>core</artifactId>
-            <version>3.5.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>javase</artifactId>
-            <version>3.5.3</version>
-        </dependency>
-         <!-- ZXing for QR Codes -->
+        <!-- ZXing for QR Codes (ONLY ONCE NOW) -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
@@ -76,6 +66,7 @@
             <version>3.5.3</version>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
