@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.14</version>
+        <version>4.1.2</version>
         <relativePath/>
     </parent>
     <groupId>com.qrapp</groupId>
@@ -13,39 +13,17 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>qrapp</name>
     <description>QR Code Generator App</description>
+
     <properties>
         <java.version>17</java.version>
-        <!-- Force patched versions for Trivy findings -->
-            <tomcat.version>10.1.59</tomcat.version>
-            <jackson-bom.version>2.18.11</jackson-bom.version>
-            <micrometer.version>1.15.12</micrometer.version>
-            <spring-framework.version>6.2.19</spring-framework.version>
+        <!-- No version overrides on purpose: Boot 4.x manages Spring Framework 7,
+             Tomcat 11, Jackson 3 and Micrometer 1.16 itself. -->
     </properties>
-    
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.tomcat.embed</groupId>
-                <artifactId>tomcat-embed-core</artifactId>
-                <version>${tomcat.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tomcat.embed</groupId>
-                <artifactId>tomcat-embed-el</artifactId>
-                <version>${tomcat.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tomcat.embed</groupId>
-                <artifactId>tomcat-embed-websocket</artifactId>
-                <version>${tomcat.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -55,7 +33,7 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
-        <!-- ZXing for QR Codes (ONLY ONCE NOW) -->
+        <!-- ZXing for QR Codes -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
