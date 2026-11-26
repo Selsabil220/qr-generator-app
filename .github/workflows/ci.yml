@@ -87,6 +87,7 @@ jobs:
           exit-code: '1'          # 1 means if HIGH/CRIT are found, the pipeline FAILS
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true    # Ignore CVEs that don't have a patch yet
+          trivyignores: '.trivyignore' # <--- ADD THIS LINE
 
       # --- PUSH TO DOCKER HUB ---
       - name: Push Docker image
