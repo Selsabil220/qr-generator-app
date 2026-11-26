@@ -40,6 +40,13 @@ jobs:
       # Build Maven
       - name: Build Java project with Maven
         run: mvn clean package -DskipTests
+      
+      # --- ADD HADOLINT HERE ---
+      - name: Lint Dockerfile with Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+      # -------------------------
 
       # Login to Docker Hub
       - name: Login to Docker Hub
