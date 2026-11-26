@@ -40,16 +40,18 @@ jobs:
       # Build Maven
       - name: Build Java project with Maven
         run: mvn clean package -DskipTests
+        
       
-      # --- SONARCLOUD SCAN ---
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: .
-          args: >
-            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      - name: SonarCloud scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >
+          mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          -Dsonar.projectKey=YOUR_PROJECT_KEY
+          -Dsonar.organization=YOUR_ORGANIZATION_KEY
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.qualitygate.wait=true
       
       # --- ADD HADOLINT HERE ---
       - name: Lint Dockerfile with Hadolint
