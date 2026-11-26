@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>17</java.version>
+        <logback.version>1.6.5</logback.version>
         <!-- No version overrides on purpose: Boot 4.x manages Spring Framework 7,
              Tomcat 11, Jackson 3 and Micrometer 1.16 itself. -->
     </properties>
