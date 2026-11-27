@@ -45,10 +45,10 @@ public class VirusTotalService {
 
     private static RestClient buildClient(String baseUrl) {
         HttpClient httpClient = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(3))
+                .connectTimeout(Duration.ofSeconds(10))
                 .build();
         JdkClientHttpRequestFactory factory = new JdkClientHttpRequestFactory(httpClient);
-        factory.setReadTimeout(Duration.ofSeconds(5));
+        factory.setReadTimeout(Duration.ofSeconds(20));
         return RestClient.builder().baseUrl(baseUrl).requestFactory(factory).build();
     }
 
@@ -72,11 +72,13 @@ public class VirusTotalService {
                     .retrieve()
                     .body(JSON_MAP);
             return evaluate(body);
-        } catch (HttpClientErrorException.NotFound e) {
+                } catch (HttpClientErrorException.NotFound e) {
             return Verdict.UNKNOWN;
         } catch (RestClientException e) {
             throw new VirusTotalUnavailableException(
-                    "VirusTotal request failed (" + e.getClass().getSimpleName() + ")", e);
+                    "VirusTotal request failed ("
+                            + e.getMostSpecificCause().getClass().getSimpleName() + ": "
+                            + e.getMostSpecificCause().getMessage() + ")", e);
         }
     }
 
