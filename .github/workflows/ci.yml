@@ -53,7 +53,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build Java project with Maven
-        run: mvn clean package -DskipTests
+        run: mvn clean package
 
       # 5. Static code analysis (needs the compiled classes)
       - name: SonarCloud scan
