@@ -19,6 +19,10 @@ services:
       - "3001:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:?set GRAFANA_ADMIN_PASSWORD in .env}
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/etc/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
     depends_on:
       - prometheus
     networks:
@@ -27,5 +31,9 @@ services:
 networks:
   monitoring:
     driver: bridge
+  
+  
+volumes:
+  grafana-data:
 
   
