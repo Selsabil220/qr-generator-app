@@ -62,36 +62,120 @@
             display: none;
             border: 1px solid #e5e7eb;
         }
+        /* --- NEW: Error Box Styling --- */
+        #errorBox {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>QR Code Generator 🚀</h1>
+    <h1>QR Code Generator</h1>
     <p>Enter a link below to generate your QR code</p>
     
     <input type="text" id="urlInput" placeholder="https://example.com">
     <button onclick="generateQR()">Generate QR Code</button>
     
     <div id="result">
-        <img id="qrImage" src="" alt="QR Code">
+        <img id="qrImage" alt="QR Code" style="display:none;">
+        <!-- NEW: The error box div -->
+        <div id="errorBox"></div>
     </div>
 </div>
 
+
 <script>
-    function generateQR() {
-        const url = document.getElementById('urlInput').value;
-        const img = document.getElementById('qrImage');
-        
-        if (url) {
-            // This calls your Java backend!
-            img.src = '/api/qr/generate?text=' + encodeURIComponent(url);
-            img.style.display = 'block'; // Show the image
-        } else {
-            alert("Please enter a URL first!");
-        }
+async function generateQR() {
+    const url = document.getElementById('urlInput').value.trim();
+    const img = document.getElementById('qrImage');
+    const errorBox = document.getElementById('errorBox');
+
+    // Reset previous results
+    img.style.display = 'none';
+
+    if (img.src.startsWith('blob:')) {
+        URL.revokeObjectURL(img.src);
     }
+
+    img.removeAttribute('src');
+    errorBox.style.display = 'none';
+    errorBox.innerText = '';
+
+    if (!url) {
+        errorBox.innerText = 'Please enter a URL first!';
+        errorBox.style.display = 'block';
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            '/api/qr/generate?text=' + encodeURIComponent(url)
+        );
+
+        if (!response.ok) {
+            const responseText = await response.text();
+
+            let message = 'QR generation refused.';
+
+            try {
+                const errorData = JSON.parse(responseText);
+
+                message =
+                    errorData.detail ||
+                    errorData.message ||
+                    errorData.error ||
+                    message;
+
+            } catch {
+                if (responseText.trim()) {
+                    message = responseText;
+                }
+            }
+
+            throw new Error(message);
+        }
+
+        const contentType = response.headers.get('content-type') || '';
+
+        if (!contentType.includes('image/png')) {
+            throw new Error('The server did not return a valid QR image.');
+        }
+
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+
+        img.onload = () => URL.revokeObjectURL(imageUrl);
+
+        img.onerror = () => {
+            URL.revokeObjectURL(imageUrl);
+            img.style.display = 'none';
+            errorBox.innerText = 'Failed to display the QR code.';
+            errorBox.style.display = 'block';
+        };
+
+        img.src = imageUrl;
+        img.style.display = 'block';
+
+    } catch (error) {
+        img.style.display = 'none';
+        errorBox.innerText = '⚠️ ' + error.message;
+        errorBox.style.display = 'block';
+
+        console.error('QR generation error:', error);
+    }
+
+}
 </script>
+
 
 </body>
 </html>
