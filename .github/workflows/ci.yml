@@ -67,7 +67,7 @@ jobs:
           -Dsonar.projectKey="$SONAR_PROJECT_KEY"
           -Dsonar.organization="$SONAR_ORGANIZATION"
           -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.qualitygate.wait=false
+          -Dsonar.qualitygate.wait=true
 
       # 6. Docker image build and smoke test
       - name: Build Docker image
