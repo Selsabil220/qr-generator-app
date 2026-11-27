@@ -68,7 +68,8 @@ public class QrController {
                 "Invalid URL. Must be a valid http or https address.");
     }
 
-    private void checkWithVirusTotal(String url) {
+    
+     private void checkWithVirusTotal(String url) {
         try {
             VirusTotalService.Verdict verdict = virusTotal.check(url);
             registry.counter("qr.urls.checked", "result", verdict.name().toLowerCase(Locale.ROOT)).increment();
@@ -87,6 +88,7 @@ public class QrController {
             }
         }
     }
+
 
     private static byte[] renderQr(String text) throws Exception {
         QRCodeWriter writer = new QRCodeWriter();
